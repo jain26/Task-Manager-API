@@ -4,15 +4,15 @@ const auth=require('../middleware/auth')
 const multer=require('multer')
 const sharp=require('sharp')
 const router=express.Router()
-const {sendWelcomeEmail,sendCancelationEmail}=require('../emails/accounts')
+const SMail=require('../emails/accounts')
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
     try {
+         await SMail.sendWelcomeEmail(user.email,user.name)
         await user.save()
-        sendWelcomeEmail(req.user.email,req.user.name)
+        
         const token=await user.generateAuthToken()
-        console.log(token)
         res.status(201).send({user,token})
     } catch (e) {
         res.status(400).send(e)
@@ -70,7 +70,7 @@ router.patch('/users/me',auth, async (req, res) => {
 router.delete('/users/me', async (req, res) => {
     try {
         req.user.remove()
-        sendCancelationEmail(req.user.email,req.user.name)
+        SMail.sendCancelationEmail(req.user.email,req.user.name)
         res.send(req.user)
     }catch(e){
         res.status(500).send(e)

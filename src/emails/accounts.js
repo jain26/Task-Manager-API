@@ -1,11 +1,11 @@
 const sgmail=require('@sendgrid/mail')
 sgmail.setApiKey(process.env.SENDGRID_API_KEY)
-const sendWelcomeEmail=(email,name)=>{
+const sendWelcomeEmail = (email,name) => {
     sgmail.send({
         to:email,
         from:'ayush.j26@gmail.com',
         Subject:'Welcome',
-        text:'Welcome to task manager app'+name+',We hope you enjoy our services.'
+        text:'Welcome to task manager API '+name+',Please give feedback.'
     })
 }
 const sendCancelationEmail=(email,name)=>{
@@ -17,7 +17,7 @@ const sendCancelationEmail=(email,name)=>{
     })
 }
 
-module.exports={
+module.exports = {
     sendWelcomeEmail,
     sendCancelationEmail
 }
