@@ -56,7 +56,7 @@ router.patch('/users/me',auth, async (req, res) => {
     const allowedUpdates = ['name', 'email', 'password', 'age']
     const correctEntries = updates.every((data) => allowedUpdates.includes(data))
     if (!correctEntries) {
-        return res.status(404).send('send correct data')
+        return res.status(400).send('send correct data')
     }
     try {
         updates.forEach((update)=> req.user[update]=req.body[update])
@@ -66,7 +66,7 @@ router.patch('/users/me',auth, async (req, res) => {
         res.status(500).send(e)
     }
 })
-router.delete('/users/me', async (req, res) => {
+router.delete('/users/me',auth, async (req, res) => {
     try {
         req.user.remove()
         SMail.sendCancelationEmail(req.user.email,req.user.name)
